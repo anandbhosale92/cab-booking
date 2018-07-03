@@ -14,16 +14,35 @@ $ npm start
 ```
 
 ### Usage Example:
-
+#####  { Create User }
+API to create new User. If already exists then error is thrown
+###### Required Param : [name, mobile, email, password, confirmPass]
+Test Cases:-
+```sh
+Url         : localhost:3000/user/register
+http method : POST
+Post Data  : {
+    "name": "anand",
+    "email": "anand@gmail.com",
+    "password": "123456",
+    "confirmPass": "123456",
+    "mobile": "9898989898"
+}
+Response: {
+  "msg": "User created successfully",
+  "userId": "5b3b0e239c2eb00937aa7e23"
+}
+```
 #####  { Create New Request }
-API to create new request.User can send multiple request
+API to create new request.
+User can send multiple request
 ###### Required Param : [userId]
 Test Cases:-
 ```sh
 Url         : localhost:3000/user/requestCab
 http method : POST
 Post Data  : {
-        	"userId": "5b3a1548464e3f70a59684d6"
+          "userId": "5b3a1548464e3f70a59684d6"
         }
 Response: {
     "msg": "Cab request submitted successfully",
@@ -39,7 +58,7 @@ Test Cases:-
 Url         : localhost:3000/user/getrequest
 http method : POST
 Post Data  : {
-        	"userId": "5b3a1548464e3f70a59684d6"
+          "userId": "5b3a1548464e3f70a59684d6"
         }
 Response: [
     {
@@ -63,8 +82,8 @@ Test Cases:-
 Url         : localhost:3000/user/checkRequest
 http method : POST
 Post Data  : {
-	"userId": "5b3a1548464e3f70a59684d6",
-	"requestId": "5b3a1cae56465610920663a1"
+  "userId": "5b3a1548464e3f70a59684d6",
+  "requestId": "5b3a1cae56465610920663a1"
 }
 Response: {
     "driverId": "5b39ee3d464e3f70a59677a4",
@@ -96,8 +115,8 @@ Test Cases:-
 Url         : localhost:3000/driver/submitrequest
 http method : POST
 Post Data:   {
-	"driverId": "5b39ee3d464e3f70a59677a4",
-	"requestId": "5b3a1cae56465610920663a1"
+  "driverId": "5b39ee3d464e3f70a59677a4",
+  "requestId": "5b3a1cae56465610920663a1"
 }
 
 Response: {
@@ -114,7 +133,6 @@ Response: {
 _id : Mongo ObjectId,
   name: String,
   email: String, // unique
-  gender: String,
   mobile: number,
   password: String
 }
