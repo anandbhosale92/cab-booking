@@ -17,6 +17,12 @@ errMsg[13] = 'Invalid input passed.';
 errMsg[14] = 'You are already allocatted to another ongoing request. This request cannot be fullfilled.';
 errMsg[15] = 'Request is already assign to another driver.';
 errMsg[16] = 'Unable to process request. Please try again later.';
+errMsg[17] = 'Required field not passed';
+errMsg[18] = 'Password and confirm password do not match';
+errMsg[19] = 'User already exsits,';
+errMsg[20] = 'Unable to process request. Please try again later.';
+errMsg[21] = 'User do not exsits against following Id.';
+errMsg[22] = 'No request created by you.';
 
 module.exports = {
   sendResponse(data) {
