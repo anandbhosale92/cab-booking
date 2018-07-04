@@ -19,7 +19,7 @@ API to create new User. If already exists then error is thrown
 ###### Required Param : [name, mobile, email, password, confirmPass]
 Test Cases:-
 ```sh
-Url         : localhost:3000/user/register
+Url         : localhost:3000/api/user/register
 http method : POST
 Post Data  : {
     "name": "anand",
@@ -39,7 +39,7 @@ User can send multiple request
 ###### Required Param : [userId]
 Test Cases:-
 ```sh
-Url         : localhost:3000/user/requestCab
+Url         : localhost:3000/api/user/requestCab
 http method : POST
 Post Data  : {
           "userId": "5b3a1548464e3f70a59684d6"
@@ -55,7 +55,7 @@ Response: {
 API to get all request made by particular user
 Test Cases:-
 ```sh
-Url         : localhost:3000/user/getrequest
+Url         : localhost:3000/api/user/getrequest
 http method : POST
 Post Data  : {
           "userId": "5b3a1548464e3f70a59684d6"
@@ -63,15 +63,21 @@ Post Data  : {
 Response: [
     {
         "requestId": "5b3a15659e2d9a0d22044f02",
-        "requestOn": "2018-07-02T12:07:01.021Z"
+        "status": "Waiting",
+        "requestOn": "2018-07-02T12:07:01.021Z",
+        "timeElapsed": 3
     },
     {
         "requestId": "5b3a1aad7171e3105e808f89",
-        "requestOn": "2018-07-02T12:29:33.941Z"
+        "status": "Waiting",
+        "requestOn": "2018-07-02T12:29:33.941Z",
+        "timeElapsed": 4
     },
     {
         "requestId": "5b3a1cae56465610920663a1",
-        "requestOn": "2018-07-02T12:38:06.113Z"
+        "status": "Waiting",
+        "requestOn": "2018-07-02T12:38:06.113Z",
+         "timeElapsed": 2
     }
 ]
 ```
@@ -79,7 +85,7 @@ Response: [
 API to check the status of request made by user.
 Test Cases:-
 ```sh
-Url         : localhost:3000/user/checkRequest
+Url         : localhost:3000/api/user/checkRequest
 http method : POST
 Post Data  : {
   "userId": "5b3a1548464e3f70a59684d6",
@@ -100,19 +106,50 @@ API to get all waiting list request of users
 ###### Required Param : [Driver Id]
 Test Cases:-
 ```sh
-Url         : localhost:3000/driver/waitingrequest/5b11350a52ac9660810fe38d {driver Id}
+Url         : localhost:3000/api/driver/waitingrequest/5b11350a52ac9660810fe38d {driver Id}
 http method : GET
 Response: {
     "msg": "Empty waiting list.",
     "code": 10
 }
 ```
+#####  { Get all Ongoing request of a driver }
+API to get all ongoing request list of users
+###### Required Param : [Driver Id]
+Test Cases:-
+```sh
+Url         : localhost:3000/api/driver/waitingrequest/5b11350a52ac9660810fe38d/O
+http method : GET
+Response: [{
+    "requestId"  :"5b3c848693b1e127a742c019",
+    "userId"     :"5b3c82dc644c42269cfd382b",
+    "timeElapsed":"241 Mins ago",
+    "requestOn"  :"2018-07-04 13:55:42",
+    "pickedOn"   :"2018-07-04 17:11:58"
+}]
+```
+#####  { Get all Complete request of a driver }
+API to get all Completed request list of users
+###### Required Param : [Driver Id]
+Test Cases:-
+```sh
+Url         : localhost:3000/api/driver/waitingrequest/5b11350a52ac9660810fe38d/C
+http method : GET
+Response: [{
+    "requestId"  :"5b3c848693b1e127a742c019",
+    "userId"     :"5b3c82dc644c42269cfd382b",
+    "timeElapsed":"241 Mins ago",
+    "requestOn"  :"2018-07-04 13:55:42",
+    "pickedOn"   :"2018-07-04 17:11:58",
+    "completedOn"   :"2018-07-04 17:16:58"
+}]
+```
 #####  {Select Request}
 API allow driver to select the waiting request
 After selecting API automatically change the state of request to onGoing and driver status also changed to ongoing.
 Test Cases:-
 ```sh
-Url         : localhost:3000/driver/submitrequest
+Url         : localhost:3000/api/driver/submitrequest
 http method : POST
 Post Data:   {
   "driverId": "5b39ee3d464e3f70a59677a4",
@@ -125,7 +162,26 @@ Response: {
     "mobile": 9022300608
 }
 ```
-
+#### DASHBOARD PART
+#####  {Get all Request}
+API to get all request for dashboard part
+Test Cases:-
+```sh
+Url         : localhost:3000/api/driver/allrequest
+http method : GET
+Response: [
+   {
+      "requestId":"5b3c848693b1e127a742c019",
+      "timeElapsed":"248 Mins ago",
+      "status":"Ongoing"
+   },
+   {
+      "requestId":"5b3c860e6efbc228bf5a9c81",
+      "timeElapsed":"241 Mins ago",
+      "status":"Ongoing"
+   }
+]
+```
 ### Database Schema:
 #### user
 ```sh

@@ -157,7 +157,7 @@ module.exports = {
       return;
     }
 
-    //CHECK FOR USER EXISTS 
+    //CHECK FOR USER EXISTS
     const isExists = await user.checkUser(data);
 
     if(!isExists) {
@@ -184,9 +184,21 @@ module.exports = {
 
       const formattedResp = [];
       for (const request of resp) {
+        let status = 'Waiting';
+        if (request.status == 'O') {
+          status = 'Ongoing';
+        }
+        if (request.status == 'c') {
+          status = 'completed';
+        }
+        const startDate   = moment(request.requestedTimeStamp, 'YYYY-M-DD HH:mm:ss');
+        const endDate     = moment();
+        const timeElapsed = endDate.diff(startDate, 'minutes');
         const temp = {
-          requestId : request._id,
-          requestOn : request.requestedTimeStamp
+          requestId   : request._id,
+          status      : status,
+          requestOn   : commonFunction.getDateTimeFromUNIX(request.requestedTimeStamp),
+          timeElapsed : timeElapsed,
         };
 
         formattedResp.push(temp);

@@ -1,7 +1,8 @@
 
 // Bring in our dependencies
 const
-  app        = require('express')(),
+  express    = require('express');
+  app        = express(),
   bodyParser = require('body-parser'),
   routes     = require('./routes'),
   mongo      = require('mongodb').MongoClient,
@@ -24,6 +25,7 @@ mongo.connect(mongoUrl, function (err, db) {
 app.use(bodyParser.json());
 //  Connect all our routes to our application
 app.use('/', routes);
+app.use('/dashboard', express.static(__dirname+'/view'));
 
 // Turn on that server!
 app.listen(PORT, () => {

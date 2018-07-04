@@ -3,6 +3,7 @@ const drivers        = require('../model/driver');
 const users          = require('../model/user');
 const commonFunction = require('../handlers/common');
 const sendResp       = require('../handlers/sendResponse');
+const moment         = require('moment');
 
 const response = {};
 module.exports = {
@@ -13,6 +14,7 @@ module.exports = {
       response.type = 'S';
 
       const driverId = req.params.driverId;
+      const type     = req.params.status ? req.params.status : 'W';
 
       if (!objectID.isValid(driverId)) {
         response.type = 'E';
@@ -24,7 +26,7 @@ module.exports = {
 
       //CHECK FOR DRIVER EXISTS
       const driverExists = await drivers.checkDriverStatus(driverId);
-      console.log(driverExists);
+
       if(!driverExists) {
         response.type = 'E';
         response.code = 9;
@@ -33,23 +35,30 @@ module.exports = {
         return;
       }
 
-      const resp = await drivers.getRequest();
-
+      const resp = await drivers.getRequest(type, driverId);
       if (resp.length <= 0) {
-        //NO WAITING REQUEST
+        //REQUEST
         response.type = 'E';
         response.code = 10;
 
         sendResp.sendResponse(response);
         return;
       }
-
+      //CHECK IF STATUS IS ONGOING THEN APPEND USER DETAIL
       let formattedResp = [];
       for (const request of resp) {
+        const startDate   = moment(request.requestedTimeStamp, 'YYYY-M-DD HH:mm:ss');
+        const endDate     = moment();
+        const timeElapsed = endDate.diff(startDate, 'minutes');
         const temp = {
-          requestId : request._id,
-          requestOn : request.requestedTimeStamp
+          requestId    : request._id,
+          userId       : request.userId,
+          timeElapsed  : timeElapsed + ' Mins ago',
+          requestOn    : commonFunction.getDateTimeFromUNIX(request.requestedTimeStamp)
         };
+        if (type !== 'W') {
+          temp.pickedOn = commonFunction.getDateTimeFromUNIX(request.pickedOn);
+        }
 
         formattedResp.push(temp);
       }
@@ -161,5 +170,60 @@ module.exports = {
       sendResp.sendResponse(response);
       return;
     }
-  }
+  },
+  async getAllRequest(req, res, next) {
+    try {
+      //CHECK FOR DRIVER LOGIN  DETAIL
+      response.res  = res;
+      response.type = 'S';
+
+      const resp = await drivers.getRequest('');
+      if (resp.length <= 0) {
+        //REQUEST
+        response.type = 'E';
+        response.code = 10;
+
+        sendResp.sendResponse(response);
+        return;
+      }
+      //CHECK IF STATUS IS ONGOING THEN APPEND USER DETAIL
+      let formattedResp = [];
+      for (const request of resp) {
+        let status = 'Waiting';
+        if (request.status == 'O') {
+          status = 'Ongoing';
+        }
+        if (request.status == 'C') {
+          status = 'Completed';
+        }
+
+        const startDate   = moment(request.requestedTimeStamp, 'YYYY-M-DD HH:mm:ss');
+        const endDate     = moment();
+        const timeElapsed = endDate.diff(startDate, 'minutes');
+        const temp = {
+          requestId    : request._id,
+          timeElapsed  : timeElapsed + ' Mins ago',
+          status       : status
+        };
+
+        formattedResp.push(temp);
+      }
+
+      if (resp) {
+        response.result = formattedResp;
+        sendResp.sendResponse(response);
+        return;
+      }
+    }
+    catch (e) {
+      response.type = 'E';
+      response.code = 23;
+      if (typeof e === 'number') {
+        response.code = e;
+      }
+
+      sendResp.sendResponse(response);
+      return;
+    }
+  },
 };

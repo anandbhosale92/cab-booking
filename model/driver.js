@@ -1,7 +1,14 @@
 module.exports = {
-  async getRequest(data) {
+  async getRequest(status, driverId = '') {
     //GET ALL USER REQUEST WHICH ARE PENDING
-    const query = { status: 'W' };
+    let query = {};
+    if (status) {
+      query.status = status;
+    }
+    //IF STATUS != W THEN PASS DRIVERID TO GET DRIVER ONGOING AND COMPLETED REQUEST
+    if (status && status !== 'W') {
+      query.driverId = driverId;
+    }
     const sort = {requestedTimeStamp: 1};
     let result = await mongoClient.collection(cabRequestDB).find(query).sort(sort).toArray();
 

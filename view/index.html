@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Main Page</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/simple-sidebar.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/dataTables.bootstrap.css">
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/jquery/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+      var sHost     = window.location.host;
+      var sProtocol = window.location.protocol;
+      var API_URL = sProtocol+'//'+sHost+'/api';
+      $(document).ready(function (){
+
+        getAllRequest();
+      });
+
+      function getAllRequest() {
+        Table = $("#requestList").DataTable({
+          destroy: true,
+          "searching": false,
+          "lengthChange": false,
+          data:[],
+          columns: [
+            { "data": "requestId" },
+            { "data": "timeElapsed" },
+            { "data": "status" }
+          ],
+          "columnDefs": [{
+            "targets": -1,
+            "data": null,
+            "defaultContent": ""
+          }],
+          rowCallback: function (row, data) { }
+
+        });
+        var url = API_URL+'/driver/allrequest';
+        $.ajax({
+          url: url,
+          success: function (response) {
+            Table.clear().draw();
+            Table.rows.add(response).draw();
+          },
+          error: function (error) {
+            alert(error.responseJSON.msg);
+          }
+        });
+
+        return false;
+    }
+    </script>
+</head>
+
+<body>
+
+    <div id="wrapper" class="toggled">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper" >
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Cab Booking
+                    </a>
+                </li>
+                <li>
+                    <a href="user/index.html">User</a>
+                </li>
+                <li>
+                    <a href="index.html">Dashboard</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div class="container">
+            <div class="row">
+              <div class="col-12">
+                <div class="card mt-3 tab-card">
+                  <div class="card-header tab-card-header">
+                    <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+                      <li class="nav-item">
+                          <a class="nav-link active show" id="one-tab" data-toggle="tab" href="#one" role="tab" aria-controls="One" aria-selected="true">Dashboard</a>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active p-3" id="one" role="tabpanel" aria-labelledby="one-tab">
+                        <h5 class="card-title">All User Request</h5>
+                        <div class="box-body">
+                            <table id="requestList" class="table table-bordered table-hover dataTable">
+                              <thead>
+                                <tr>
+                                  <th style="width: 150px">requestId</th>
+                                  <th style="width: 100px">Requested Time</th>
+                                  <th style="width: 50px">Status</th>
+                                  <!--<th>CSS grade</th>-->
+                                </tr>
+                              </thead>
+                            </table>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Bootstrap core JavaScript -->
+
+
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+
+</body>
+
+</html>

@@ -4,14 +4,14 @@ const saltRounds = 10;
 module.exports = {
   async requestCab(data) {
 
-    let query = { userId: objectID(data.userId), status: 'W'};
-    //CHECK FOR USER HAS ALREADY REQUEST OR NOT
-    const result = await mongoClient.collection(cabRequestDB).find(query).toArray();
+    // let query = { userId: objectID(data.userId), status: 'W'};
+    // //CHECK FOR USER HAS ALREADY REQUEST OR NOT
+    // const result = await mongoClient.collection(cabRequestDB).find(query).toArray();
 
-    if (result.length > 0) {
-      //USER HAS ALREADY IN REQUEST QUEUE
-      throw 3;
-    }
+    // if (result.length > 0) {
+    //   //USER HAS ALREADY IN REQUEST QUEUE
+    //   throw 3;
+    // }
 
     //ADD USER REQUEST
     const insertParam = {

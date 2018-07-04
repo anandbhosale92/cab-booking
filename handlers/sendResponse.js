@@ -10,7 +10,7 @@ errMsg[6] = 'No such request found aginst particular Id.';
 errMsg[7] = 'Unable to process request. Please try again later.';
 errMsg[8] = 'Invalid input passed.';
 errMsg[9] = 'No driver found against particular Id.';
-errMsg[10] = 'Empty waiting list.';
+errMsg[10] = 'No record found.';
 errMsg[11] = 'Unable to process request. Please try again later.';
 errMsg[12] = 'Required field not passed';
 errMsg[13] = 'Invalid input passed.';
@@ -23,6 +23,7 @@ errMsg[19] = 'User already exsits,';
 errMsg[20] = 'Unable to process request. Please try again later.';
 errMsg[21] = 'User do not exsits against following Id.';
 errMsg[22] = 'No request created by you.';
+errMsg[23] = 'Unable to process request. Please try again later.';
 
 module.exports = {
   sendResponse(data) {
